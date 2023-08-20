@@ -9,8 +9,8 @@
 	},
 	"devDependencies": {
 		"cross-env": "latest",
-		"electron": "^15.5.5",
-		"electron-builder": "^20.40.2"
+		"electron": "^26.0.0",
+		"electron-builder": "^24.6.3"
 	},
 	"scripts": {
 		"dist:win32": "node ./builders/win32.js",
