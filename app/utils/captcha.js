@@ -1,11 +1,13 @@
 const { protocol } = require("electron");
 const url = require("url");
-const fs = require("fs");
 const path = require("path");
 
-let captchaPage = fs.readFileSync(
-  path.join(__dirname, "..", "public", "html", "captcha.html"),
-  "utf8"
+const captchaFilePath = path.join(
+  __dirname,
+  "..",
+  "public",
+  "html",
+  "captcha.html"
 );
 
 module.exports = {
@@ -24,17 +26,13 @@ module.exports = {
   },
   registerProtocol: function () {
     protocol
-      .registerFileProtocol("cap", (request) => {
-        return new Promise((resolve, reject) => {
-          let ReUrl = url.parse(request.url, true);
-          if (ReUrl.query["g-recaptcha-response"]) {
-            let response = ReUrl.query["g-recaptcha-response"];
-            this.callbackResponse(response);
-          }
-          resolve({
-            path: captchaFilePath,
-          });
-        });
+      .registerFileProtocol("cap", async (request) => {
+        let ReUrl = url.parse(request.url, true);
+        if (ReUrl.query["g-recaptcha-response"]) {
+          let response = ReUrl.query["g-recaptcha-response"];
+          this.callbackResponse(response);
+        }
+        return { path: captchaFilePath };
       })
       .catch((error) => {
         console.error("Failed to register protocol:", error);
